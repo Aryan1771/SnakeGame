@@ -26,7 +26,7 @@ Snake Game is a classic grid-based Snake implementation built with Python and Py
 Snake Game.py            Main game source
 Snake Game.spec          PyInstaller build specification
 freesansbold.ttf         Font asset
-music.mp3                Background music
+music.mp3                Optional user-supplied background music
 Snake Game/              Generated build output
 ```
 
@@ -35,7 +35,7 @@ Snake Game/              Generated build output
 Install dependencies:
 
 ```powershell
-pip install pygame pyinstaller
+python -m pip install pygame pyinstaller
 ```
 
 Run the game:
@@ -59,7 +59,7 @@ The executable is generated in the PyInstaller output directory.
 
 ## Notes
 
-The game expects `music.mp3` and `freesansbold.ttf` to be available next to the Python file or bundled through PyInstaller.
+The repository includes `freesansbold.ttf`. Background music is optional: place a permitted `music.mp3` beside the source to enable it. The game continues without music when the file or audio device is unavailable; the build includes music only when present.
 
 ## License
 

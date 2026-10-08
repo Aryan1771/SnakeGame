@@ -7,7 +7,7 @@ def resource_path(relative_path):
     try:
         base_path = sys._MEIPASS   # PyInstaller temp folder
     except Exception:
-        base_path = os.path.abspath(".")
+        base_path = os.path.dirname(os.path.abspath(__file__))
 
     return os.path.join(base_path, relative_path)
 
@@ -19,9 +19,19 @@ assert WINDOWWIDTH % CELLSIZE == 0, "Window width must be a multiple of cell siz
 assert WINDOWHEIGHT % CELLSIZE == 0, "Window height must be a multiple of cell size."
 CELLWIDTH = int(WINDOWWIDTH / CELLSIZE)
 CELLHEIGHT = int(WINDOWHEIGHT / CELLSIZE)
-pygame.mixer.init()
-pygame.mixer.music.load(resource_path('music.mp3'))
-pygame.mixer.music.play(-1)
+def start_music():
+    """Enable optional background music without making audio a startup requirement."""
+    music_path = resource_path("music.mp3")
+    if not os.path.isfile(music_path):
+        return
+    try:
+        pygame.mixer.init()
+        pygame.mixer.music.load(music_path)
+        pygame.mixer.music.play(-1)
+    except (pygame.error, OSError):
+        # Missing audio devices or unsupported media must not prevent gameplay.
+        return
+
 WHITE     = (255, 255, 255)
 BLACK     = (  0,   0,   0)
 RED       = (255,   0,   0)
@@ -39,6 +49,7 @@ HEAD = 0 # syntactic sugar: index of the worm's head
 def main():
     global FPSCLOCK, DISPLAYSURF, BASICFONT
     pygame.init()
+    start_music()
     FPSCLOCK = pygame.time.Clock()
     DISPLAYSURF = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT))
     BASICFONT = pygame.font.Font(resource_path('freesansbold.ttf'), 18)
@@ -61,7 +72,7 @@ def runGame():
 
     # Start the apple in a random place.
     apple = getRandomLocation()
-    
+
     while True:
         for event in pygame.event.get(): # event handling loop
             if event.type == QUIT:
@@ -127,7 +138,7 @@ def checkForKeyPress():
     if keyUpEvents[0].key == K_ESCAPE:
         terminate()
     return keyUpEvents[0].key
-    
+
 def showStartScreen():
     titleFont = pygame.font.Font(resource_path('freesansbold.ttf'), 100)
     titleSurf1 = titleFont.render('Snake Game!', True, WHITE, DARKGREEN)
@@ -233,4 +244,3 @@ def drawGrid():
 
 if __name__ == '__main__':
     main()
-

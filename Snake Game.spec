@@ -1,11 +1,16 @@
 # -*- mode: python ; coding: utf-8 -*-
+from pathlib import Path
+
+assets = [("freesansbold.ttf", ".")]
+if Path("music.mp3").is_file():
+    assets.append(("music.mp3", "."))
 
 
 a = Analysis(
     ['Snake Game.py'],
     pathex=[],
     binaries=[],
-    datas=[('music.mp3', '.'), ('freesansbold.ttf', '.')],
+    datas=assets,
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
